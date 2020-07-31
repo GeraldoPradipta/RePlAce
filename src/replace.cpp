@@ -7,6 +7,7 @@
 #include "timingBase.h"
 #include "logger.h"
 #include <iostream>
+#include "rcplace.h" //RCPlace
 
 namespace replace {
 
@@ -16,6 +17,7 @@ Replace::Replace()
   : db_(nullptr), 
   sta_(nullptr), 
   fr_(nullptr),
+  rp_(nullptr), // Added for RCPlace
   pb_(nullptr), nb_(nullptr), 
   ip_(nullptr), np_(nullptr),
   log_(nullptr),
@@ -103,7 +105,10 @@ void Replace::reset() {
   padLeft_ = padRight_ = 0;
   verbose_ = 0;
 }
-
+// RCPlace
+void Replace::setRCPlace(RCPlace::RCPlace* rp) {
+  rp_ = rp;
+}
 void Replace::setDb(odb::dbDatabase* db) {
   db_ = db;
 }
@@ -183,7 +188,7 @@ void Replace::doNesterovPlace() {
 
 
   TimingBaseVars tbVars;
-  tb_ = std::make_shared<TimingBase>(tbVars, db_, nb_, log_);
+  tb_ = std::make_shared<TimingBase>(tbVars, db_, rp_, nb_, log_);
 
   NesterovPlaceVars npVars;
 

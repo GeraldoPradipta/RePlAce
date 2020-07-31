@@ -8,6 +8,11 @@ namespace odb {
   class dbDatabase;
 }
 
+ //RCPlace
+namespace RCPlace {
+  class RCPlace;
+}
+
 namespace replace {
 
 class Logger;
@@ -33,6 +38,7 @@ class TimingBase {
     TimingBase();
     TimingBase(TimingBaseVars tbVars,
         odb::dbDatabase* db, 
+        RCPlace::RCPlace* rp, // Added for RCPlace
         std::shared_ptr<NesterovBase> nb,
         std::shared_ptr<Logger> log);
     ~TimingBase();
@@ -46,6 +52,7 @@ class TimingBase {
   private:
     TimingBaseVars tbVars_;
     odb::dbDatabase* db_;
+    RCPlace::RCPlace* rp_; // Added for RCPlace
     
     std::shared_ptr<NesterovBase> nb_;
     std::shared_ptr<Logger> log_; 

@@ -8,6 +8,9 @@
 #include <cmath>
 #include <iostream>
 
+#include <unordered_map>
+#include <rcplace.h> //RCPlace
+
 namespace replace {
 
 // TimingBaseVars
@@ -64,16 +67,18 @@ TimingBaseVars::reset() {
 
 // TimingBase
 TimingBase::TimingBase() 
-  : tbVars_(), db_(nullptr), nb_(nullptr), log_(nullptr) {}
+  : tbVars_(), db_(nullptr), rp_(nullptr), nb_(nullptr), log_(nullptr) {}
 
 TimingBase::TimingBase(
     TimingBaseVars tbVars,
-    odb::dbDatabase* db, 
+    odb::dbDatabase* db,
+    RCPlace::RCPlace* rp,
     std::shared_ptr<NesterovBase> nb, 
     std::shared_ptr<Logger> log)
   : TimingBase() {
     tbVars_ = tbVars;
     db_ = db;
+    rp_ = rp;
     nb_ = nb;
     log_ = log;
 
@@ -134,26 +139,29 @@ TimingBase::isTimingUpdateIter(float overflow) {
 void
 TimingBase::updateGNetWeight() {
   log_->procBegin("TimingInst: updateGNetWeight");
+  nb_->updateDbGCells();
+  std::unordered_map<std::string, float> weight =
+        rp_->updateNetWeight();
 
-  // get all instances' location
-  for(auto& gCell : nb_->gCells()) {
-    if( gCell->isFiller() ) {
-      continue;
-    }
+  //// get all instances' location
+  //for(auto& gCell : nb_->gCells()) {
+  //  if( gCell->isFiller() ) {
+  //    continue;
+  //  }
 
-    // print gCell's name and density center points. (dCx,dCy)
-    // -- note that during Nesterov loop, dCx() and dCy() are used.
-    //
-    //std::cout << gCell->instance()->dbInst()->getConstName() << " " 
-    //  << gCell->dCx() << " " <<gCell->dCy () << std::endl;
-  }
+  //  // print gCell's name and density center points. (dCx,dCy)
+  //  // -- note that during Nesterov loop, dCx() and dCy() are used.
+  //  //
+  //  //std::cout << gCell->instance()->dbInst()->getConstName() << " " 
+  //  //  << gCell->dCx() << " " <<gCell->dCy () << std::endl;
+  //}
 
   // get all nets 
   for(auto& gNet : nb_->gNets()) {
     // print all net names
     // std::cout << gNet->net()->dbNet()->getConstName() << std::endl;
-    
-
+    string netName = gNet->net()->dbNet()->getConstName();
+    gNet->setTimingWeight(weight[netName]);
     // do some calculation(?)
 
     // do reweight!

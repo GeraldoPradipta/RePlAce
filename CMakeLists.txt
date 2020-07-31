@@ -95,6 +95,12 @@ target_include_directories( replace
   ${FASTROUTE_HOME}/include
   ${TCL_INCLUDE_PATH}
   flute3
+  
+#  RCPlace
+  ${OPENSTA_HOME}
+  ${OPENSTA_HOME}/include
+  ${OPENSTA_HOME}/include/sta
+  ${RCPLACE_HOME}/src
 )
 
 target_link_libraries( replace

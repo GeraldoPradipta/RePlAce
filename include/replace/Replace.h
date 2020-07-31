@@ -12,6 +12,10 @@ namespace sta {
 namespace FastRoute{
   class FastRouteKernel;
 }
+ //RCPlace
+namespace RCPlace {
+  class RCPlace;
+}
 
 namespace replace {
 
@@ -34,6 +38,7 @@ class Replace
     void init();
     void reset();
 
+    void setRCPlace(RCPlace::RCPlace* rp); //RCPlace
     void setDb(odb::dbDatabase* odb);
     void setSta(sta::dbSta* dbSta);
     void setFastRoute(FastRoute::FastRouteKernel* fr);
@@ -90,6 +95,7 @@ class Replace
     odb::dbDatabase* db_;
     sta::dbSta* sta_;
     FastRoute::FastRouteKernel* fr_;
+    RCPlace::RCPlace* rp_; // Added for RCPlace
 
     std::shared_ptr<PlacerBase> pb_;
     std::shared_ptr<NesterovBase> nb_;
